@@ -1,4 +1,47 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.welcome-banner {
+    top: 0;
+    padding-top: 25px;
+    background-color: aliceblue;
+}
+.welcome-banner-text h1 {
+    font-size: 3em;
+}
+
 .login-box {
     text-align: center;
     padding: 50px;
+    background-color: lightgrey;
 }
+
+.login-box h2 {
+    padding-bottom: 25px;
+}
+
+.dashboard {
+    padding-bottom: 30px;
+    padding-top: 25px;
+    background-color: aliceblue;
+}
+
+.recently_viewed h2 {
+    text-align: center;
+    padding-top: 20px;
+}
+
+.recently_viewed {
+    background-color: lightblue;
+}
+.recently_uploaded {
+    background-color: lightcyan;
+}
+.recently_uploaded h2 {
+    text-align: center;
+    padding-top: 20px;
+}
+
