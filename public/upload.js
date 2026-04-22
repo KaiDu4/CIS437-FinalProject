@@ -1,5 +1,7 @@
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js';
-import {getStorage, ref, uploadBytes} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js';
+import {getDownloadURL, getStorage, ref, uploadBytes} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js';
+import {getFirestore, collection,  addDoc} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js';
+
 // Web app Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyDZytRK5UceQcWV-Y5RDxmd1Lq3iKx4yrI",
@@ -11,6 +13,8 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 const storage = getStorage(app);
 
 document.getElementById("submit").addEventListener("click", function (event) {
@@ -20,5 +24,13 @@ document.getElementById("submit").addEventListener("click", function (event) {
     const date = new Date().toDateString();
     const file = document.getElementById("file").files[0];
     const storageRef = ref(storage, `lessons/${file.name}`);
-})
+    const lessonCol = collection(db, "lessons");
+    uploadBytes(storageRef, file).then((snapshot) => {
+        getDownloadURL(storageRef).then((url) => {
+            addDoc(lessonCol, {title, author, date, url}).then(() => {
+                window.location.href = "dashboard.html"
+            });
+        });
+    });
+});
 
