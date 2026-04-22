@@ -1,5 +1,5 @@
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js';
-import {getStorage, ref} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js';
+import {getStorage, ref, uploadBytes} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js';
 // Web app Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyDZytRK5UceQcWV-Y5RDxmd1Lq3iKx4yrI",
@@ -19,5 +19,6 @@ document.getElementById("submit").addEventListener("click", function (event) {
     const title = document.getElementById("title").value;
     const date = new Date().toDateString();
     const file = document.getElementById("file").files[0];
+    const storageRef = ref(storage, `lessons/${file.name}`);
 })
 
