@@ -17,13 +17,50 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+const lessonCol = collection(db, "lessons");
+
+const uploadContainer = document.querySelector('.recently_uploaded_content');
+
+function fetchLessons() {
+    getDocs(lessonCol).then((snapshot) => {
+        uploadContainer.innerHTML = ''
+        ;
+        snapshot.forEach((doc) => {
+            console.log("Lesson:", doc.data());
+            const lesson = doc.data();
+
+
+            uploadContainer.innerHTML += `
+                <div class="recently_uploaded_item">
+                    <div class="recently_uploaded_image">
+                        <h3>Image placeholder</h3>
+                    </div>
+                    <div class="recently_uploaded_info">
+                        <div class="recently_uploaded_title">
+                            <h4>${lesson.title}</h4>
+                        </div>
+                        <div class="recently_uploaded_date">
+                            <h4>${lesson.date}</h4>
+                        </div>
+                        <div class="Creator_Info">
+                            <h4>${lesson.author}</h4>
+                        </div>
+                    </div>
+                </div>
+            `;
+        })
+    })
+}
+
 // Making sure they're logged in before they can access the dashboard
 onAuthStateChanged(auth, (user) => {
     if (user) {
         // The teacher is logged in
         console.log("Teacher logged in:", user.email);
-        // We will write the code to fetch lesson plans here next.
+        fetchLessons()
+
     } else {
         window.location.href = 'index.html';
     }
 });
+

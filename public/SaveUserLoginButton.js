@@ -23,7 +23,8 @@ function validateInput(email, password) {
     return user_bool && pass_bool;
 }
 
-document.getElementById("Submit").addEventListener("click", function() {
+document.getElementById("Submit").addEventListener("click", function(event) {
+    event.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const isValid = validateInput(email, password)
@@ -44,5 +45,4 @@ document.getElementById("Submit").addEventListener("click", function() {
         console.log("Validation failed. Fix the inputs.");
     }
 })
-
 
