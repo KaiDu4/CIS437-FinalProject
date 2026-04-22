@@ -19,9 +19,9 @@ const db = getFirestore(app);
 
 const lessonCol = collection(db, "lessons");
 
-const uploadContainer = document.querySelector('.recently_uploaded_content');
 
 function fetchLessons() {
+    const uploadContainer = document.querySelector('.recently_uploaded_content');
     getDocs(lessonCol).then((snapshot) => {
         uploadContainer.innerHTML = ''
         ;

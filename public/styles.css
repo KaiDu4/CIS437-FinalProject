@@ -82,22 +82,37 @@
 .dashboard {
     padding-bottom: 30px;
     padding-top: 25px;
+    padding-left:2px;
     background-color: aliceblue;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.link {
+    margin: 5px;
 }
 
 .recently_viewed h2 {
     text-align: center;
     padding-top: 20px;
 }
-
-.recently_viewed {
-    background-color: lightblue;
-}
-.recently_uploaded {
+body {
     background-color: lightcyan;
+
+}
+.recently_viewed_content {
+    padding-left:20px;
+}
+.recently_uploaded_content {
+    padding-left:20px;
 }
 .recently_uploaded h2 {
     text-align: center;
     padding-top: 20px;
 }
+
+
 

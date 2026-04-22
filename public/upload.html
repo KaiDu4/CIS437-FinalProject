@@ -1,21 +1,35 @@
-<!DOCTYPE html>                                                                                                 
-<html lang="en">                                                                                                
-<head>                                                                                                          
-    <meta charset="UTF-8">                                                                                      
-    <title>TeachShare Upload</title>                                                                            
-    <script type="module" src="upload.js" defer></script>                                                       
-    <link rel="stylesheet" href="styles.css">                                                                   
-</head>                                                                                                         
-<body>                                                                                                          
-    <form id="upload" class="uploads">                                                                          
-        <label for="name">Author</label>                                                                        
-        <input type="text" name="name" id="name" placeholder="Enter Your Name" required>                        
-        <label for="title">Title</label>                                                                        
-        <input type="text" name="title" id="title" placeholder="Title of Lesson" required>                      
-        <input type="file" name="file" id="file">                                                               
-        <br>                                                                                                    
-        <br>                                                                                                    
-        <button type="submit" id="submit">Submit</button>                                                       
-    </form>                                                                                                     
-</body>                                                                                                         
-</html>                                                                                                         
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TeachShare Upload</title>
+    <script type="module" src="upload.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="welcome-banner">
+        <h1>TeachShare Upload</h1>
+    </div>
+    <a href="dashboard.html"><h3>Return to Dashboard</h3></a>
+    <div class="page-container">
+        <div class="login-box">
+            <form id="upload" class="form">
+                <div class="form-group">
+                    <label for="name">Author</label>
+                    <input type="text" name="name" id="name" placeholder="Enter Your Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" name="title" id="title" placeholder="Title of Lesson" required>
+                </div>
+                <div class="form-group">
+                    <input type="file" name="file" id="file">
+                </div>
+                <br>
+                <br>
+                <button type="submit" id="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TeachShare</title>
+  <script type="module" src="login.js" defer></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+<div class="welcome-banner">
+  <header class="header">
+    <div class="logo"><h1>TeachShare</h1></div>
+  </header>
+</div>
+<div class="page-container">
+  <div class="login-box">
+    <h2 class="title">Sign In!</h2>
+    <p class="subtitle">Please Sign In Below</p>
+
+    <form id="login-form" class="form">
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" placeholder="Email" autocomplete="on">
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="text" id="password" name="password" placeholder="Password" autocomplete="on">
+      </div>
+      <button type="submit" class="button" id="Submit">Sign In</button>
+    </form>
+    <div class="quick-access">
+      <div class="divider">
+        <span class="divider-text">Quick Access</span>
+      </div>
+
+      <button type="button" id="google" class="btn-google">Google</button>
+    </div>
+    <a href="index.html">Sign Up Here!</a>
+  </div>
+</div>
+</body>
+</html>
