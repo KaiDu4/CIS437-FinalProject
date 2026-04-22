@@ -7,20 +7,76 @@
 .welcome-banner {
     top: 0;
     padding-top: 25px;
+    padding-bottom: 40px;
     background-color: aliceblue;
 }
-.welcome-banner-text h1 {
-    font-size: 3em;
+.logo h1 {
+    font-size: 4em;
+}
+
+.page-container {
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    align-items: center;
+    margin: auto;
+    padding-top: 50px;
 }
 
 .login-box {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    padding: 40px 32px 48px;
     text-align: center;
-    padding: 50px;
-    background-color: lightgrey;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: 500;
+    color: #202124;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: #5f6368;
+    font-size: 15px;
+    margin-bottom: 32px;
+}
+
+.form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 28px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #5f6368;
+    margin-bottom: 6px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 0 12px;
+    border: none;
+    border-bottom: 2px solid #dadce0;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    border-bottom-color: #1a73e8;
 }
 
 .login-box h2 {
-    padding-bottom: 25px;
+    padding-bottom: 10px;
 }
 
 .dashboard {
