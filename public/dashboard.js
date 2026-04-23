@@ -1,6 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js';
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js';
-import { getFirestore, collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js';
+import { getFirestore, collection, getDocs, deleteDoc, doc, query, where} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js';
 
 
 // Web app Firebase configuration
@@ -27,9 +27,23 @@ document.getElementById("logout-btn").addEventListener("click", function (event)
     });
 });
 
-function fetchLessons() {
+function attachDeleteListeners() {
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const documentId = this.getAttribute('data-id');
+            deleteDoc(doc(db, "lessons", documentId)).then(() => {
+                console.log("deleted:", documentId);
+                location.reload();
+            });
+        });
+    });
+}
+
+function fetchLessons(q) {
     const uploadContainer = document.querySelector('.recently_uploaded_content');
-    getDocs(lessonCol).then((snapshot) => {
+    getDocs(q).then((snapshot) => {
         uploadContainer.innerHTML = '';
         snapshot.forEach((doc) => {
             console.log("Lesson:", doc.data());
@@ -50,12 +64,14 @@ function fetchLessons() {
                         </div>
                         <div class="Creator_Info">
                             <h4>${lesson.author}</h4>
+                            <button class="delete-btn" data-id="${doc.id}">Delete</button>
                         </div>
                     </div>
                 </div>
             `;
-        })
-    })
+        });
+        attachDeleteListeners()
+    });
 }
 
 // Making sure they're logged in before they can access the dashboard - need to figure out individualized dashboard if time
@@ -63,7 +79,8 @@ onAuthStateChanged(auth, (user) => {
     if (user) {
         // The teacher is logged in
         console.log("Teacher logged in:", user.email);
-        fetchLessons()
+        const name_query= query(lessonCol, where("name", "==", user.email));
+        fetchLessons(name_query)
 
     } else {
         window.location.href = 'index.html';
