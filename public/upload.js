@@ -1,6 +1,7 @@
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js';
 import {getDownloadURL, getStorage, ref, uploadBytes} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js';
 import {getFirestore, collection,  addDoc} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js';
+import {getAuth, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
 // Web app Firebase configuration
 const firebaseConfig = {
@@ -13,6 +14,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
 
 const storage = getStorage(app);
@@ -21,16 +23,32 @@ document.getElementById("submit").addEventListener("click", function (event) {
     event.preventDefault();
     const author =  document.getElementById("name").value;
     const title = document.getElementById("title").value;
-    const date = new Date().toDateString();
+    const date = new Date().toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+    });
+
     const file = document.getElementById("file").files[0];
     const storageRef = ref(storage, `lessons/${file.name}`);
     const lessonCol = collection(db, "lessons");
-    uploadBytes(storageRef, file).then((snapshot) => {
-        getDownloadURL(storageRef).then((url) => {
-            addDoc(lessonCol, {title, author, date, url}).then(() => {
-                window.location.href = "dashboard.html"
-            });
-        });
-    });
-});
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            uploadBytes(storageRef, file).then((snapshot) => {
+                getDownloadURL(storageRef).then((url) => {
+                    const name = user.email
+                    addDoc(lessonCol, {title, name, author, date, url}).then(() => {
+                        window.location.href = "dashboard.html"
+                    });
+                })
+            })
+        }
+    })
+})
+
+
+
+
+
 

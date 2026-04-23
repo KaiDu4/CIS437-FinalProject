@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js';
-import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js';
+import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js';
 import { getFirestore, collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js';
 
 
@@ -16,15 +16,21 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
 const lessonCol = collection(db, "lessons");
 
+document.getElementById("logout-btn").addEventListener("click", function (event) {
+    event.preventDefault()
+    signOut(auth).then(() => {
+        window.location.href = "login.html";
+    }).catch((error) => {
+        console.log(error);
+    });
+});
 
 function fetchLessons() {
     const uploadContainer = document.querySelector('.recently_uploaded_content');
     getDocs(lessonCol).then((snapshot) => {
-        uploadContainer.innerHTML = ''
-        ;
+        uploadContainer.innerHTML = '';
         snapshot.forEach((doc) => {
             console.log("Lesson:", doc.data());
             const lesson = doc.data();
@@ -52,7 +58,7 @@ function fetchLessons() {
     })
 }
 
-// Making sure they're logged in before they can access the dashboard
+// Making sure they're logged in before they can access the dashboard - need to figure out individualized dashboard if time
 onAuthStateChanged(auth, (user) => {
     if (user) {
         // The teacher is logged in
@@ -63,4 +69,5 @@ onAuthStateChanged(auth, (user) => {
         window.location.href = 'index.html';
     }
 });
+
 

@@ -1,5 +1,9 @@
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js';
-import {createUserWithEmailAndPassword, getAuth} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js';
+import {
+    createUserWithEmailAndPassword,
+    getAuth,
+    GoogleAuthProvider
+} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js';
 
 // Web app Firebase configuration
 const firebaseConfig = {
@@ -13,6 +17,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
+const provider = new GoogleAuthProvider();
 
 function validateInput(email, password) {
     console.log("validateUser working...")
