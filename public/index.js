@@ -1,9 +1,6 @@
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js';
-import {
-    createUserWithEmailAndPassword,
-    getAuth,
-    GoogleAuthProvider
-} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js';
+import {createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, updateProfile} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js';
+
 
 // Web app Firebase configuration
 const firebaseConfig = {
@@ -32,6 +29,7 @@ document.getElementById("Submit").addEventListener("click", function(event) {
     event.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    const fullName= document.getElementById('fullname').value;
     const isValid = validateInput(email, password)
 
     if (isValid) {
@@ -40,7 +38,11 @@ document.getElementById("Submit").addEventListener("click", function(event) {
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 console.log("User created:", userCredential.user);
-                window.location.href = 'dashboard.html';
+                updateProfile(userCredential.user, {
+                    displayName: fullName
+                }).then(() => {
+                    window.location.href = 'dashboard.html';
+                });
             })
 
             .catch((error) => {

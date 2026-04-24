@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>TeachShare</title>
-  <script type="module" src="SaveUserLoginButton.js" defer></script>
+  <script type="module" src="index.js" defer></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -19,6 +19,10 @@
         <p class="subtitle">Please Sign Up Below</p>
 
         <form id="login-form" class="form">
+          <div class="form-group">
+            <label for="fullname">Name:</label>
+            <input type="text" id="fullname" placeholder="Enter your full name" required>
+          </div>
           <div class="form-group">
             <label for="email">Email:</label>
             <input type="text" id="email" name="email" placeholder="Email" autocomplete="on">

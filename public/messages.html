@@ -7,17 +7,36 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div class="welcome-banner">
+    <h1>TeachShare Messages</h1>
+    <div class="link">
+        <a href="upload.html"><h3>Upload a Lesson</h3></a>
+        <a href="dashboard.html"><h3>Dashboard</h3></a>
+        <a href="browse.html"><h3>Browse</h3></a>
+        <button id="logout-btn">Logout</button>
+    </div>
+</div>
+
 <div class="chat-container">
-    <h2>Chat</h2>
-    <div id="messages-display" style="height: 400px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px;">
+
+    <div class="contacts-sidebar">
+        <h3>Conversations</h3>
+        <div id="contacts-list"></div>
     </div>
 
-    <div class="chat-input" style="margin-top: 10px;">
-        <input type="text" id="message-input" placeholder="Type a message..." style="width: 70%;">
-        <button id="send-btn">Send</button>
+    <div class="chat-area">
+        <div id="messages-display">
+            <p>Select a conversation to start chatting!</p>
+        </div>
+
+        <div class="chat-input">
+            <label for="recipient-email">Email:</label>
+            <input type="text" id="recipient-email" readonly placeholder="Select a contact...">
+            <label for="message-input">Message:</label>
+            <input type="text" id="message-input" placeholder="Type a message...">
+            <button id="send-btn">Send</button>
+        </div>
     </div>
-    <br>
-    <a href="dashboard.html">Dashboard</a>
 </div>
 </body>
 </html>

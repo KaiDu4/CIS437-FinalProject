@@ -1,24 +1,16 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js';
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js';
 import { getFirestore, collection, getDocs, deleteDoc, doc, query, where} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js';
-import {getStorage, ref, deleteObject} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js';
-
-
 // Web app Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDZytRK5UceQcWV-Y5RDxmd1Lq3iKx4yrI",
-    authDomain: "dulak-finalproject-cis437.firebaseapp.com",
-    projectId: "dulak-finalproject-cis437",
-    storageBucket: "dulak-finalproject-cis437.firebasestorage.app",
-    messagingSenderId: "229405261161",
-    appId: "1:229405261161:web:9ed022cdb9f0c1406611f8"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const storage = getStorage(app);
-const db = getFirestore(app);
-const lessonCol = collection(db, "lessons");
+        apiKey: "AIzaSyDZytRK5UceQcWV-Y5RDxmd1Lq3iKx4yrI",
+        authDomain: "dulak-finalproject-cis437.firebaseapp.com",
+        projectId: "dulak-finalproject-cis437",
+        storageBucket: "dulak-finalproject-cis437.firebasestorage.app",
+        messagingSenderId: "229405261161",
+        appId: "1:229405261161:web:9ed022cdb9f0c1406611f8"
+    }, app = initializeApp(firebaseConfig), auth = getAuth(app), db = getFirestore(app),
+    lessonCol = collection(db, "lessons");
 
 document.getElementById("logout-btn").addEventListener("click", function (event) {
     event.preventDefault()
@@ -35,21 +27,9 @@ function attachDeleteListeners() {
     deleteButtons.forEach(button => {
         button.addEventListener('click', function() {
             const documentId = this.getAttribute('data-id');
-            const fileUrl = this.getAttribute('data-url');
-
             deleteDoc(doc(db, "lessons", documentId)).then(() => {
-                const fileRef = ref(storage, fileUrl);
-
-
-                deleteObject(fileRef).then(() => {
-                    console.log("Database record and physical file completely deleted");
-                    location.reload();
-                }).catch((error) => {
-                    console.error("Error deleting physical file:", error);
-                });
-
-            }).catch((error) => {
-                console.error("Error deleting database record:", error);
+                console.log("deleted:", documentId);
+                location.reload();
             });
         });
     });
@@ -62,6 +42,8 @@ function fetchLessons(q) {
         snapshot.forEach((doc) => {
             console.log("Lesson:", doc.data());
             const lesson = doc.data();
+
+
             uploadContainer.innerHTML += `
                 <div class="recently_uploaded_item">
                     <div class="recently_uploaded_image">
@@ -69,14 +51,13 @@ function fetchLessons(q) {
                     </div>
                     <div class="recently_uploaded_info">
                         <div class="recently_uploaded_title">
-                            <h4>${lesson.title}</h4>
+                            <h4>Lesson: ${lesson.title}</h4>
                         </div>
                         <div class="recently_uploaded_date">
-                            <h4>${lesson.date}</h4>
+                            <h4>Uploaded on: ${lesson.date}</h4>
                         </div>
                         <div class="Creator_Info">
-                            <h4>${lesson.author}</h4>
-                            <button class="delete-btn" data-id="${doc.id}" data-url="${lesson.url}">Delete</button>
+                            <h4>Uploaded by: ${lesson.author}</h4>
                             <a href="messages.html?to=${lesson.name}&topic=${encodeURIComponent(lesson.title)}"><button>Send a message</button></a>
                         </div>
                     </div>
@@ -87,18 +68,16 @@ function fetchLessons(q) {
     });
 }
 
-// Making sure they're logged in before they can access things
+// Making sure they're logged in before they can access the dashboard - need to figure out individualized dashboard if time
 onAuthStateChanged(auth, (user) => {
     if (user) {
         // The teacher is logged in
         console.log("Teacher logged in:", user.email);
-        document.getElementById("welcome-msg").innerText = "Welcome, " + user.displayName + "!";
-        const name_query= query(lessonCol, where("name", "==", user.email));
-        fetchLessons(name_query)
+        //const name_query= query(lessonCol, where("name", "==", user.email));
+        fetchLessons(lessonCol)
 
     } else {
         window.location.href = 'index.html';
     }
 });
-
 
