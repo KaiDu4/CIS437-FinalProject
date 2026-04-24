@@ -37,7 +37,7 @@ if (toEmail) {
 }
 
 if (topic) {
-    document.getElementById("message-input").value = `Hi, I have a question about your lesson plan`;
+    document.getElementById("message-input").value = `Hi, I have a question about your lesson plan "${topic}" - `;
 }
 
 function loadMessages() {
@@ -70,10 +70,10 @@ function renderContacts(contacts) {
     contactsDiv.innerHTML = "";
 
     contacts.forEach(contactEmail => {
-        const isSelected = contactEmail === currentChatUser ? "background-color: #d1ecf1;" : "";
+        const isSelected = contactEmail === currentChatUser ? "selected" : "";
 
         contactsDiv.innerHTML += `
-            <div class="contact-item" data-email="${contactEmail}" style="padding: 10px; cursor: pointer; border-bottom: 1px solid #eee; ${isSelected}">
+            <div class="contact-item ${isSelected}" data-email="${contactEmail}">
                 <strong>${contactEmail}</strong>
             </div>
         `;
@@ -93,7 +93,6 @@ function renderChat() {
     const display = document.getElementById("messages-display");
     display.innerHTML = "";
 
-
     if (currentChatUser === "") {
         display.innerHTML = `<p style="text-align: center; color: #888; margin-top: 50px;">Select a conversation to start chatting!</p>`;
         return;
@@ -105,7 +104,7 @@ function renderChat() {
             (msg.sender === currentChatUser && msg.recipient === currentUserEmail)
         ) {
             display.innerHTML += `
-                <div style="margin-bottom: 10px; padding: 10px; border-radius: 5px; background-color: ${msg.sender === currentUserEmail ? '#e3f2fd' : '#f1f1f1'};">
+                <div class="message-bubble ${msg.sender === currentUserEmail ? 'sent' : 'received'}">
                     <small><strong>${msg.sender}</strong></small><br>
                     ${msg.text}
                 </div>
@@ -113,7 +112,7 @@ function renderChat() {
         }
     });
 
-    display.scrollTop = display.scrollHeight;
+    display.scrollTop = display.scrollHeight; // Auto-scroll to bottom
 }
 
 document.getElementById("send-btn").addEventListener("click", function (event) {
@@ -123,6 +122,8 @@ document.getElementById("send-btn").addEventListener("click", function (event) {
     const inputElement = document.getElementById("message-input");
     const text = inputElement.value;
 
+    if (!recipientEmail || !text.trim()) return;
+
     currentChatUser = recipientEmail;
 
     addDoc(messagesCol, {
@@ -131,7 +132,7 @@ document.getElementById("send-btn").addEventListener("click", function (event) {
         recipient: recipientEmail,
         timestamp: serverTimestamp()
     }).then(() => {
-            inputElement.value = "";
+        inputElement.value = "";
     });
 });
 

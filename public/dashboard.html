@@ -4,47 +4,34 @@
     <meta charset="UTF-8">
     <title>TeachShare Dashboard</title>
     <script type="module" src="dashboard.js" defer></script>
+    <script src="nav.js" defer></script>
     <link rel="stylesheet" href="styles.css">
 </head>
-    <body>
-        <div class="dashboard">
-            <h1>TeachShare Dashboard</h1>
-            <div class="link">
-                <a href="upload.html"><h3>Upload a Lesson</h3></a>
-                <a href="messages.html"><h3>Send a Chat</h3></a>
-                <a href="browse.html"><h3>Browse</h3></a>
-                <button id="logout-btn">Logout</button>
-            </div>
-        </div>
+<body>
+<nav class="nav">
+    <div class="nav__brand">
+        <img src="logo.png" alt="TeachShare Logo" class="nav__logo">
+        <span class="nav__title">TeachShare</span>
+    </div>
+    <button class="nav__toggle" id="nav-toggle" aria-label="Open navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul class="nav__menu" id="nav-menu">
+        <li><a href="upload.html">Upload a Lesson</a></li>
+        <li><a href="messages.html">Send a Chat</a></li>
+        <li><a href="browse.html">Browse</a></li>
+        <li><button id="logout-btn" class="nav__logout">Logout</button></li>
+    </ul>
+</nav>
 
-        <div class="main-sections">
-            <h2 id="welcome-msg"></h2>
-            <div class="recently_viewed">
-                <h2>Recently Viewed</h2>
-                <div class="recently_viewed_content">
-                    <div class="recently_viewed_item">
-                        <div class="recently_viewed_image">
-                            <h3>Image placeholder</h3>
-                        </div>
-                        <div class="recently_viewed_info">
-                            <div class="recently_viewed_title">
-                                <h4>Title</h4>
-                            </div>
-                            <div class="recently_viewed_date">
-                                <h4>Date</h4>
-                            </div>
-                            <div class="Creator_Info">
-                                <h4>Creator</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="recently_uploaded">
-                    <h2>Recently Uploaded</h2>
-                    <div class="recently_uploaded_content">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </body>
+<div class="main-sections">
+    <h2 id="welcome-msg"></h2>
+    <div class="recently_uploaded">
+        <h2>My Uploaded Lessons</h2>
+        <div class="recently_uploaded_content"></div>
+    </div>
+</div>
+</body>
 </html>

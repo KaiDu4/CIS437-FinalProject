@@ -1,6 +1,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js';
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js';
-import { getFirestore, collection, getDocs, deleteDoc, doc, query, where} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js';
+import { getFirestore, collection, getDocs} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js';
+
 // Web app Firebase configuration
 const firebaseConfig = {
         apiKey: "AIzaSyDZytRK5UceQcWV-Y5RDxmd1Lq3iKx4yrI",
@@ -21,50 +22,40 @@ document.getElementById("logout-btn").addEventListener("click", function (event)
     });
 });
 
-function attachDeleteListeners() {
-    const deleteButtons = document.querySelectorAll('.delete-btn');
+function fetchLessons() {
+    const container = document.getElementById("all-lessons-content");
+    getDocs(lessonCol).then((snapshot) => {
+        container.innerHTML = '';
 
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const documentId = this.getAttribute('data-id');
-            deleteDoc(doc(db, "lessons", documentId)).then(() => {
-                console.log("deleted:", documentId);
-                location.reload();
-            });
-        });
-    });
-}
+        if (snapshot.empty) {
+            container.innerHTML = '<p style="text-align:center; padding: 40px; color: #666;">No lessons uploaded yet.</p>';
+            return;
+        }
 
-function fetchLessons(q) {
-    const uploadContainer = document.querySelector('.recently_uploaded_content');
-    getDocs(q).then((snapshot) => {
-        uploadContainer.innerHTML = '';
         snapshot.forEach((doc) => {
             console.log("Lesson:", doc.data());
             const lesson = doc.data();
+            const thumbSrc = lesson.thumbnailUrl || "";
+            const thumbHtml = thumbSrc
+                ? `<img src="${thumbSrc}" alt="Lesson thumbnail" class="lesson-thumbnail" onerror="this.outerHTML='<div class=\\'lesson-thumbnail lesson-thumbnail--placeholder\\'>Processing...</div>'">`
+                : `<div class="lesson-thumbnail lesson-thumbnail--placeholder">No Preview</div>`;
 
-
-            uploadContainer.innerHTML += `
-                <div class="recently_uploaded_item">
-                    <div class="recently_uploaded_image">
-                        <h3>Image placeholder</h3>
-                    </div>
-                    <div class="recently_uploaded_info">
-                        <div class="recently_uploaded_title">
-                            <h4>Lesson: ${lesson.title}</h4>
-                        </div>
-                        <div class="recently_uploaded_date">
-                            <h4>Uploaded on: ${lesson.date}</h4>
-                        </div>
-                        <div class="Creator_Info">
-                            <h4>Uploaded by: ${lesson.author}</h4>
+            container.innerHTML += `
+                <div class="lesson-card">
+                    <a href="${lesson.url}" target="_blank" class="lesson-card__thumb-link">
+                        ${thumbHtml}
+                    </a>
+                    <div class="lesson-card__info">
+                        <h4 class="lesson-card__title">Lesson: ${lesson.title}</h4>
+                        <p class="lesson-card__meta">Uploaded on: ${lesson.date}</p>
+                        <p class="lesson-card__meta">Uploaded by: ${lesson.author}</p>
+                        <div class="lesson-card__actions">
                             <a href="messages.html?to=${lesson.name}&topic=${encodeURIComponent(lesson.title)}"><button>Send a message</button></a>
                         </div>
                     </div>
                 </div>
             `;
         });
-        attachDeleteListeners()
     });
 }
 
@@ -73,11 +64,8 @@ onAuthStateChanged(auth, (user) => {
     if (user) {
         // The teacher is logged in
         console.log("Teacher logged in:", user.email);
-        //const name_query= query(lessonCol, where("name", "==", user.email));
-        fetchLessons(lessonCol)
-
+        fetchLessons();
     } else {
         window.location.href = 'index.html';
     }
 });
-

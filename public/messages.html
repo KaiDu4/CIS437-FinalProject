@@ -4,21 +4,29 @@
     <meta charset="UTF-8">
     <title>TeachShare Messages</title>
     <script type="module" src="messages.js" defer></script>
+    <script src="nav.js" defer></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="welcome-banner">
-    <h1>TeachShare Messages</h1>
-    <div class="link">
-        <a href="upload.html"><h3>Upload a Lesson</h3></a>
-        <a href="dashboard.html"><h3>Dashboard</h3></a>
-        <a href="browse.html"><h3>Browse</h3></a>
-        <button id="logout-btn">Logout</button>
+<nav class="nav">
+    <div class="nav__brand">
+        <img src="logo.png" alt="TeachShare Logo" class="nav__logo">
+        <span class="nav__title">TeachShare</span>
     </div>
-</div>
+    <button class="nav__toggle" id="nav-toggle" aria-label="Open navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <ul class="nav__menu" id="nav-menu">
+        <li><a href="upload.html">Upload a Lesson</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="browse.html">Browse</a></li>
+        <li><button id="logout-btn" class="nav__logout">Logout</button></li>
+    </ul>
+</nav>
 
 <div class="chat-container">
-
     <div class="contacts-sidebar">
         <h3>Conversations</h3>
         <div id="contacts-list"></div>
@@ -26,9 +34,8 @@
 
     <div class="chat-area">
         <div id="messages-display">
-            <p>Select a conversation to start chatting!</p>
+            <p style="text-align: center; color: #888; margin-top: 50px;">Select a conversation to start chatting!</p>
         </div>
-
         <div class="chat-input">
             <label for="recipient-email">Email:</label>
             <input type="text" id="recipient-email" readonly placeholder="Select a contact...">

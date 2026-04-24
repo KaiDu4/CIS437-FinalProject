@@ -1,0 +1,12 @@
+{
+  "name": "teachshare-thumbnail-fn",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.0.0",
+    "@google-cloud/storage": "^7.0.0",
+    "@google-cloud/secret-manager": "^5.0.0",
+    "cloudconvert": "^3.0.0",
+    "axios": "^1.6.0"
+  }
+}

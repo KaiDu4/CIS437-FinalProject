@@ -1,6 +1,6 @@
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js';
 import {getDownloadURL, getStorage, ref, uploadBytes} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js';
-import {getFirestore, collection,  addDoc} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js';
+import {getFirestore, collection, addDoc} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js';
 import {getAuth, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
 // Web app Firebase configuration
@@ -16,12 +16,22 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
 const storage = getStorage(app);
+
+function getFileExtension(filename) {
+    return filename.split('.').pop() || "FILE";
+}
+
+document.getElementById("file").addEventListener("change", function () {
+    const file = this.files[0];
+    if (!file) return;
+    const previewContainer = document.getElementById("thumbnail-preview");
+    previewContainer.innerHTML = `<div class="file-type-badge">${getFileExtension(file.name).toUpperCase()}</div>`;
+});
 
 document.getElementById("submit").addEventListener("click", function (event) {
     event.preventDefault();
-    const author =  document.getElementById("name").value;
+    const author = document.getElementById("name").value;
     const title = document.getElementById("title").value;
     const date = new Date().toLocaleDateString('en-US', {
         month: 'short',
@@ -30,25 +40,24 @@ document.getElementById("submit").addEventListener("click", function (event) {
     });
 
     const file = document.getElementById("file").files[0];
+    if (!file) return;
+
     const storageRef = ref(storage, `lessons/${file.name}`);
     const lessonCol = collection(db, "lessons");
 
+    const baseName = file.name.replace(/\.[^/.]+$/, '');
+    const thumbnailUrl = `https://storage.googleapis.com/teachshare-thumbnails/thumb_${baseName}.png`;
+
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            uploadBytes(storageRef, file).then((snapshot) => {
+            uploadBytes(storageRef, file).then(() => {
                 getDownloadURL(storageRef).then((url) => {
-                    const name = user.email
-                    addDoc(lessonCol, {title, name, author, date, url}).then(() => {
-                        window.location.href = "dashboard.html"
+                    const name = user.email;
+                    addDoc(lessonCol, {title, name, author, date, url, thumbnailUrl}).then(() => {
+                        window.location.href = "dashboard.html";
                     });
-                })
-            })
+                });
+            });
         }
-    })
-})
-
-
-
-
-
-
+    });
+});

@@ -3,7 +3,6 @@ import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/fi
 import { getFirestore, collection, getDocs, deleteDoc, doc, query, where} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js';
 import {getStorage, ref, deleteObject} from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js';
 
-
 // Web app Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyDZytRK5UceQcWV-Y5RDxmd1Lq3iKx4yrI",
@@ -30,24 +29,22 @@ document.getElementById("logout-btn").addEventListener("click", function (event)
 });
 
 function attachDeleteListeners() {
-    const deleteButtons = document.querySelectorAll('.delete-btn');
-
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function() {
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function () {
             const documentId = this.getAttribute('data-id');
             const fileUrl = this.getAttribute('data-url');
+            const thumbUrl = this.getAttribute('data-thumb');
 
             deleteDoc(doc(db, "lessons", documentId)).then(() => {
-                const fileRef = ref(storage, fileUrl);
+                const deletions = [deleteObject(ref(storage, fileUrl))];
+                if (thumbUrl) deletions.push(deleteObject(ref(storage, thumbUrl)));
 
-
-                deleteObject(fileRef).then(() => {
+                Promise.all(deletions).then(() => {
                     console.log("Database record and physical file completely deleted");
                     location.reload();
                 }).catch((error) => {
                     console.error("Error deleting physical file:", error);
                 });
-
             }).catch((error) => {
                 console.error("Error deleting database record:", error);
             });
@@ -59,46 +56,43 @@ function fetchLessons(q) {
     const uploadContainer = document.querySelector('.recently_uploaded_content');
     getDocs(q).then((snapshot) => {
         uploadContainer.innerHTML = '';
-        snapshot.forEach((doc) => {
-            console.log("Lesson:", doc.data());
-            const lesson = doc.data();
+        snapshot.forEach((document) => {
+            const lesson = document.data();
+            const thumbSrc = lesson.thumbnailUrl || "";
+            const thumbHtml = thumbSrc
+                ? `<img src="${thumbSrc}" alt="Lesson thumbnail" class="lesson-thumbnail" onerror="this.outerHTML='<div class=\\'lesson-thumbnail lesson-thumbnail--placeholder\\'>Processing...</div>'">`
+                : `<div class="lesson-thumbnail lesson-thumbnail--placeholder">No Preview</div>`;
+
             uploadContainer.innerHTML += `
-                <div class="recently_uploaded_item">
-                    <div class="recently_uploaded_image">
-                        <h3>Image placeholder</h3>
-                    </div>
-                    <div class="recently_uploaded_info">
-                        <div class="recently_uploaded_title">
-                            <h4>${lesson.title}</h4>
-                        </div>
-                        <div class="recently_uploaded_date">
-                            <h4>${lesson.date}</h4>
-                        </div>
-                        <div class="Creator_Info">
-                            <h4>${lesson.author}</h4>
-                            <button class="delete-btn" data-id="${doc.id}" data-url="${lesson.url}">Delete</button>
+                <div class="lesson-card">
+                    <a href="${lesson.url}" target="_blank" class="lesson-card__thumb-link">
+                        ${thumbHtml}
+                    </a>
+                    <div class="lesson-card__info">
+                        <h4 class="lesson-card__title">${lesson.title}</h4>
+                        <p class="lesson-card__meta">${lesson.date}</p>
+                        <p class="lesson-card__meta">${lesson.author}</p>
+                        <div class="lesson-card__actions">
+                            <button class="delete-btn" data-id="${document.id}" data-url="${lesson.url}" data-thumb="${thumbSrc}">Delete</button>
                             <a href="messages.html?to=${lesson.name}&topic=${encodeURIComponent(lesson.title)}"><button>Send a message</button></a>
                         </div>
                     </div>
                 </div>
             `;
         });
-        attachDeleteListeners()
+        attachDeleteListeners();
     });
 }
 
-// Making sure they're logged in before they can access things
+// Making sure they're logged in before they can access the dashboard
 onAuthStateChanged(auth, (user) => {
     if (user) {
         // The teacher is logged in
         console.log("Teacher logged in:", user.email);
         document.getElementById("welcome-msg").innerText = "Welcome, " + user.displayName + "!";
-        const name_query= query(lessonCol, where("name", "==", user.email));
-        fetchLessons(name_query)
-
+        const name_query = query(lessonCol, where("name", "==", user.email));
+        fetchLessons(name_query);
     } else {
         window.location.href = 'index.html';
     }
 });
-
-
