@@ -45,8 +45,8 @@ document.getElementById("submit").addEventListener("click", function (event) {
     const storageRef = ref(storage, `lessons/${file.name}`);
     const lessonCol = collection(db, "lessons");
 
-    const baseName = file.name.replace(/\.[^/.]+$/, '');
-    const thumbnailUrl = `https://storage.googleapis.com/teachshare-thumbnails/thumb_${baseName}.png`;
+    const thumbFileName = `thumb_${file.name.replace(/\.[^/.]+$/, '')}.png`;
+    const thumbnailUrl = `https://storage.googleapis.com/teachshare-thumbnails/${thumbFileName}`;
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
